@@ -42,19 +42,15 @@ async function showLogin() {
     names.unshift(last);
   }
 
-  let html = names.map(n =>
+  choices.innerHTML = names.map(n =>
     `<button class="choice" data-name="${escapeAttr(n)}">👤 ${escapeHtml(n)}${n === last ? " ⭐" : ""}</button>`
   ).join("");
-  html += `<button class="choice new" id="newPlayerBtn">➕ Uusi pelaaja</button>`;
-  choices.innerHTML = html;
 
   choices.querySelectorAll(".choice[data-name]").forEach(btn => {
     btn.onclick = () => selectPlayer(btn.dataset.name);
   });
-  document.getElementById("newPlayerBtn").onclick = () => {
-    document.getElementById("newPlayerArea").hidden = false;
-    document.getElementById("nameInput").focus();
-  };
+
+  document.getElementById("newPlayerBtn").hidden = false;
 }
 
 // Valitse olemassa oleva pelaaja
@@ -77,6 +73,12 @@ function bindEvents() {
   document.getElementById("saveTask").onclick = saveCompletion;
   document.getElementById("removeTask").onclick = removeCompletion;
   document.getElementById("fileInput").onchange = handleFile;
+
+  document.getElementById("newPlayerBtn").onclick = () => {
+    document.getElementById("newPlayerArea").hidden = false;
+    document.getElementById("newPlayerBtn").hidden = true;
+    document.getElementById("nameInput").focus();
+  };
 
   document.getElementById("lightboxClose").onclick = () => document.getElementById("lightbox").hidden = true;
   document.getElementById("lightbox").onclick = e => { if (e.target.id === "lightbox") document.getElementById("lightbox").hidden = true; };

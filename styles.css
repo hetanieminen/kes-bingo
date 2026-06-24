@@ -78,6 +78,7 @@ button:active { transform: scale(0.96); }
   box-shadow: var(--shadow);
   padding: 28px;
   width: 100%; max-width: 460px;
+  max-height: 90vh; overflow-y: auto;
   position: relative;
   border: 3px solid #fff;
 }
@@ -191,7 +192,13 @@ textarea { resize: vertical; line-height: 1.5; }
 
 /* ---- Login ---- */
 .login p { color: #6a5566; }
-.choices { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 6px; }
+.choices {
+  display: flex; flex-direction: column; gap: 10px; margin: 16px 0 10px;
+  max-height: 42vh; overflow-y: auto;
+  padding-right: 4px;
+}
+.choices::-webkit-scrollbar { width: 8px; }
+.choices::-webkit-scrollbar-thumb { background: #e6cfe0; border-radius: 8px; }
 .choice {
   background: #fff; color: var(--ink);
   border: 2px solid #f0d9ea; border-radius: 14px;
