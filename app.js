@@ -78,6 +78,9 @@ function bindEvents() {
   document.getElementById("removeTask").onclick = removeCompletion;
   document.getElementById("fileInput").onchange = handleFile;
 
+  document.getElementById("lightboxClose").onclick = () => document.getElementById("lightbox").hidden = true;
+  document.getElementById("lightbox").onclick = e => { if (e.target.id === "lightbox") document.getElementById("lightbox").hidden = true; };
+
   document.getElementById("editTasksBtn").onclick = openEditModal;
   document.getElementById("editClose").onclick = () => document.getElementById("editOverlay").hidden = true;
   document.getElementById("saveTasks").onclick = saveTasks;
@@ -187,17 +190,42 @@ function renderGrid() {
     let inner = `<span class="celltext">${escapeHtml(t.text)}</span>`;
     if (done) {
       const img = c.image_url ? `<img class="bgimg" src="${escapeAttr(c.image_url)}" alt="">` : "";
-      const cap = c.caption ? `<span class="caption">${escapeHtml(c.caption)}</span>` : "";
-      inner = `${img}<span class="check">✓</span>${cap}<span class="celltext">${escapeHtml(t.text)}</span>`;
+      const zoom = (!isMine && c.image_url) ? `<span class="zoom">🔍</span>` : "";
+      inner = `${img}<span class="check">✓</span>${zoom}<span class="celltext">${escapeHtml(t.text)}</span>`;
     }
-    return `<div class="cell ${done ? "done" : ""} ${isMine ? "clickable" : ""}" data-pos="${t.position}">${inner}</div>`;
+    const clickable = isMine || done;
+    return `<div class="cell ${done ? "done" : ""} ${clickable ? "clickable" : ""}" data-pos="${t.position}">${inner}</div>`;
   }).join("");
 
-  if (isMine) {
-    grid.querySelectorAll(".cell").forEach(cell => {
-      cell.onclick = () => openTaskModal(parseInt(cell.dataset.pos, 10));
-    });
+  grid.querySelectorAll(".cell").forEach(cell => {
+    const pos = parseInt(cell.dataset.pos, 10);
+    if (isMine) {
+      cell.onclick = () => openTaskModal(pos);
+    } else if (getCompletion(viewing, pos)) {
+      cell.onclick = () => openLightbox(viewing, pos);
+    }
+  });
+}
+
+// ---------- Kuvan suurennus ----------
+function openLightbox(name, pos) {
+  const c = getCompletion(name, pos);
+  if (!c) return;
+  const task = tasks.find(t => t.position === pos);
+  const img = document.getElementById("lightboxImg");
+  if (c.image_url) {
+    img.src = c.image_url;
+    img.style.display = "block";
+  } else {
+    img.removeAttribute("src");
+    img.style.display = "none";
   }
+  document.getElementById("lightboxName").textContent = "👤 " + name;
+  document.getElementById("lightboxTask").textContent = task ? task.text : "";
+  const cap = document.getElementById("lightboxCaption");
+  cap.textContent = c.caption || "";
+  cap.style.display = c.caption ? "block" : "none";
+  document.getElementById("lightbox").hidden = false;
 }
 
 // ---------- Suoritusmodaali ----------
