@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>☀️ Kesäbingo</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>☀️ Kesäbingo</h1>
+    <div class="who" id="who" hidden>
+      <span id="whoName"></span>
+      <button id="changeName" class="ghost">vaihda</button>
+    </div>
+  </header>
+
+  <!-- Kirjautuminen -->
+  <div class="overlay" id="loginOverlay">
+    <div class="card login">
+      <h2>Kuka olet? 🌞</h2>
+      <p>Valitse pelaaja tai luo uusi.</p>
+
+      <div class="choices" id="playerChoices"></div>
+
+      <div id="newPlayerArea" hidden>
+        <input id="nameInput" type="text" placeholder="Nimesi" maxlength="30" autocomplete="off" />
+        <button id="loginBtn" class="primary">Aloita</button>
+      </div>
+
+      <p class="err" id="loginErr"></p>
+    </div>
+  </div>
+
+  <main id="app" hidden>
+    <!-- Tulostaulu -->
+    <section class="leaderboard" id="leaderboard"></section>
+
+    <!-- Pelaajavalitsin -->
+    <nav class="players" id="playerTabs"></nav>
+
+    <div class="viewing" id="viewingLabel"></div>
+
+    <!-- Bingoruudukko -->
+    <section class="grid" id="grid"></section>
+
+    <div class="toolbar">
+      <button id="editTasksBtn" class="ghost">✏️ Muokkaa tehtäviä</button>
+    </div>
+  </main>
+
+  <!-- Suoritusmodaali -->
+  <div class="overlay" id="taskOverlay" hidden>
+    <div class="card task-modal">
+      <button class="close" id="taskClose">✕</button>
+      <h3 id="taskTitle"></h3>
+
+      <div class="img-preview" id="imgPreview"></div>
+
+      <label class="filebtn">
+        📷 Valitse kuva
+        <input type="file" id="fileInput" accept="image/*" capture="environment" hidden />
+      </label>
+      <div class="uploading" id="uploading" hidden>Ladataan kuvaa…</div>
+
+      <input id="captionInput" type="text" placeholder="Kuvateksti (vapaaehtoinen)" maxlength="140" />
+
+      <div class="modal-actions">
+        <button id="saveTask" class="primary">Merkitse suoritetuksi</button>
+        <button id="removeTask" class="danger" hidden>Poista suoritus</button>
+      </div>
+      <p class="err" id="taskErr"></p>
+    </div>
+  </div>
+
+  <!-- Tehtävien muokkaus -->
+  <div class="overlay" id="editOverlay" hidden>
+    <div class="card edit-modal">
+      <button class="close" id="editClose">✕</button>
+      <h3>Muokkaa tehtäviä</h3>
+      <p class="hint">Yksi tehtävä per rivi. Tyhjät rivit jätetään pois. Ruudukko muotoutuu määrän mukaan.</p>
+      <textarea id="tasksText" rows="14" placeholder="Tehtävä 1&#10;Tehtävä 2&#10;..."></textarea>
+      <div class="modal-actions">
+        <button id="saveTasks" class="primary">Tallenna tehtävät</button>
+      </div>
+      <p class="err" id="editErr"></p>
+    </div>
+  </div>
+
+  <div class="setup-warning" id="setupWarning" hidden>
+    ⚠️ <strong>Asetukset puuttuvat.</strong> Avaa <code>config.js</code> ja täytä Supabase-tiedot. Ks. <code>README.md</code>.
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
